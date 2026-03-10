@@ -1,20 +1,19 @@
 # Stage 1: Build
-FROM node:20-alpine as build-stage
+FROM node:20-alpine AS build-stage
 WORKDIR /app
 
 # 利用 Docker cache，先處理依賴
 COPY package*.json ./
-# 使用 npm ci (Clean Install) 確保環境 100% 相同，且不會嘗試修改 package-lock.json
 RUN npm install
 
 # 複製剩餘源代碼
 COPY . .
-# 執行編譯 (Vite 會將結果輸出到 dist/)
-RUN npm run build
 
-# Stage 2: Production
+# 直接用 npx 呼叫 vite，繞過 npm script 路徑問題
+RUN npx vite build
+
+# Stage 2: Production (Nginx 靜態服務)
 FROM nginx:stable-alpine
-# 將建置好的靜態檔案移入 Nginx
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
