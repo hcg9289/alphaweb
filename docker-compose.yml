@@ -1,0 +1,13 @@
+services:
+  alphaweb:
+    build: .
+    container_name: alphaweb-1007
+    restart: always
+    ports:
+      - "5007:80"
+    networks:
+      - VPS-net
+
+networks:
+  VPS-net:
+    external: true
