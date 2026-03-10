@@ -2,14 +2,16 @@
 FROM node:20-alpine AS build-stage
 WORKDIR /app
 
-# 利用 Docker cache，先處理依賴
-COPY package*.json ./
+# 只複製 package.json（不複製 lock 文件）
+# 因為 lock 文件在 Windows 上生成，包含 Windows 平台的 Rollup 二進位
+# 在 Alpine Linux 上需要重新解析正確的 rollup-linux-arm64-musl
+COPY package.json ./
 RUN npm install
 
 # 複製剩餘源代碼
 COPY . .
 
-# 直接用 npx 呼叫 vite，繞過 npm script 路徑問題
+# 直接用 npx 呼叫 vite
 RUN npx vite build
 
 # Stage 2: Production (Nginx 靜態服務)
