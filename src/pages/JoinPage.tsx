@@ -20,9 +20,10 @@ const offerKeys = [
 ] as const;
 
 const testimonials = [
-    { key: 'testimonial1', initials: 'SL' },
-    { key: 'testimonial2', initials: 'MC' },
-    { key: 'testimonial3', initials: 'EW' },
+    { key: 'testimonial1', initials: 'DC' },
+    { key: 'testimonial2', initials: 'IY' },
+    { key: 'testimonial3', initials: 'YY' },
+    { key: 'testimonial4', initials: 'TL' },
 ] as const;
 
 export default function JoinPage({ t, waUrl }: Props) {
