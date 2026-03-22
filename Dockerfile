@@ -17,5 +17,20 @@ RUN npx vite build
 # Stage 2: Production (Nginx 靜態服務)
 FROM nginx:stable-alpine
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Level 3: 讓 nginx 以非 root user(101) 執行
+# 預建快取目錄並移交產權，避免 Permission denied
+RUN mkdir -p /var/cache/nginx/client_temp \
+             /var/cache/nginx/proxy_temp \
+             /var/cache/nginx/fastcgi_temp \
+             /var/cache/nginx/uwsgi_temp \
+             /var/cache/nginx/scgi_temp \
+    && chown -R nginx:nginx /var/cache/nginx \
+    && chown -R nginx:nginx /var/log/nginx \
+    && touch /var/run/nginx.pid \
+    && chown nginx:nginx /var/run/nginx.pid
+
+USER nginx
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
