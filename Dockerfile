@@ -17,6 +17,8 @@ RUN npx vite build
 # Stage 2: Production (Nginx 靜態服務)
 FROM nginx:stable-alpine
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+# 注入快取破壞設定：index.html no-cache，靜態資源長快取
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Level 3: 讓 nginx 以非 root user(101) 執行
 # 預建快取目錄並移交產權，避免 Permission denied
