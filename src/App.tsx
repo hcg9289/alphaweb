@@ -7,7 +7,7 @@ import JoinPage from './pages/JoinPage';
 type Page = 'home' | 'join';
 
 // Hong Kong WhatsApp: country code 852
-const WA_PHONE = '85295847154';
+const WA_PHONE = '85262998771';
 
 function App() {
   const [lang, setLang] = useState<Lang>('en');
