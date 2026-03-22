@@ -3,6 +3,15 @@ services:
     build: .
     container_name: alphaweb-1001
     restart: always
+    # Level 3: Property Lockdown - nginx built-in non-root user
+    user: "101:101"
+    # Level 2: Instruction Lockdown
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 256m
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]
       interval: 60s
